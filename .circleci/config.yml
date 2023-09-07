@@ -1,0 +1,37 @@
+version: 2.1
+
+jobs:
+  build:
+    docker:
+      - image: nginx:alpine
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [squirtle-build]
+      - run:
+          name: setup
+          command: |
+            cd squirtle-app
+            make setup
+      - run:
+          name: install dependencies
+          command: |
+            cd squirtle-app
+            make install
+      - run:
+          name: run test
+          command: |
+            cd squirtle-app
+            make test
+      - run:
+          name: run lint
+          command: |
+            cd squirtle-app
+            make lint
+      - save_cache:
+          paths: [squirtle-app/node_modules]
+          key: squirtle-build
+workflows:
+  default:
+    jobs:
+      - build

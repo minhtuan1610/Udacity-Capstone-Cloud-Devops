@@ -16,7 +16,44 @@ jobs:
           command: |
             cd Docker
             make lint
+  push-docker:
+    working_directory: /squirtle-app
+    docker:
+      - image: docker:17.05.0-ce-git
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.7
+      - run:
+          name: Build image
+          command: |
+            cd Docker
+            export DOCKER_PATH=$DOCKER_PATH
+            export DOCKER_PASS=$DOCKER_PASS
+
+            # Build image and add a descriptive tag
+            docker build --tag=capstone-squirtle-${CIRCLE_WORKFLOW_ID:0:7} .
+
+            # Get list of docker image
+            docker image ls
+      - run:
+          name: login and push image to docker
+          command:
+            # cd Docker
+            # export DOCKER_PATH=$DOCKER_PATH
+            # export DOCKER_PASS=$DOCKER_PASS
+
+            docker login -u ${DOCKER_PATH} -p ${DOCKER_PASS}
+
+            # Create tag
+            docker tag capstone-squirtle ${DOCKER_PATH}/capstone-squirtle-${CIRCLE_WORKFLOW_ID:0:7}
+
+            # Push image to a docker repository
+            docker push ${DOCKER_PATH}/capstone-squirtle-${CIRCLE_WORKFLOW_ID:0:7}
+
 workflows:
   default:
     jobs:
       - build
+      - push-docker:
+          requires: [build]

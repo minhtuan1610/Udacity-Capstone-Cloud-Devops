@@ -38,7 +38,7 @@ jobs:
             docker image ls
       - run:
           name: login and push image to docker
-          command:
+          command: |
             # cd Docker
             # export DOCKER_PATH=$DOCKER_PATH
             # export DOCKER_PASS=$DOCKER_PASS

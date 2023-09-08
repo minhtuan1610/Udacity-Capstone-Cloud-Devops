@@ -19,7 +19,7 @@ jobs:
   push-docker:
     working_directory: /squirtle-app
     docker:
-      - image: docker:17.05.0-ce-git
+      - image: cimg/node:18.12.0
     steps:
       - checkout
       - setup_remote_docker:

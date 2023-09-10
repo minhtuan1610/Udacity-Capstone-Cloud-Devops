@@ -58,7 +58,7 @@ jobs:
           name: Install tar
           command: |
             yum update
-            yum install -y tar
+            yum install -y tar gzip
             tar --version
       - attach_workspace:
           at: ~/
@@ -72,7 +72,7 @@ jobs:
           name: Install eksctl
           command: |
             curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
-            sudo mv /tmp/eksctl /usr/local/bin
+            mv /tmp/eksctl /usr/local/bin
       - run:
           name: Create eks cluster
           command: |

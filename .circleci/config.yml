@@ -74,7 +74,9 @@ jobs:
       - run:
           name: Install eksctl
           command: |
-            curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
+            echo "Download, extract and install eksctl"
+            curl --silent --location "https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
+            echo "move eksctl to the bin folder"
             mv /tmp/eksctl /usr/local/bin
       - run:
           name: Create eks cluster

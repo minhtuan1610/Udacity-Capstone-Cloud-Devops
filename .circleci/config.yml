@@ -58,7 +58,7 @@ jobs:
           name: Install tar
           command: |
             yum update
-            yum install tar
+            yum install -y tar
             tar --version
       - attach_workspace:
           at: ~/

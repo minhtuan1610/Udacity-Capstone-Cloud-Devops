@@ -49,10 +49,33 @@ jobs:
 
             # Push image to a docker repository
             docker push ${DOCKER_PATH}/capstone-squirtle-${CIRCLE_WORKFLOW_ID:0:7}
-
+  deploy:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install kubectl
+          command: |
+            curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+            # Check version of the installed kubectl
+            kubectl version --client
+      - run:
+          name: Install eksctl
+          command: |
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            sudo mv /tmp/eksctl /usr/local/bin
+      - run:
+          name: Create eks cluster
+          command: |
+            # Write command here
 workflows:
   default:
     jobs:
       - build
       - push-docker:
           requires: [build]
+      - deploy:
+          requires: [push-docker]

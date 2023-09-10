@@ -65,13 +65,16 @@ jobs:
       - run:
           name: Install kubectl
           command: |
+            echo "Download kubectl"
             curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt`/bin/linux/amd64/kubectl
+            echo "Install kubectl"
+            install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
             echo "Check version of the installed kubectl"
             kubectl version --client
       - run:
           name: Install eksctl
           command: |
-            curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/download/latest_release/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp
             mv /tmp/eksctl /usr/local/bin
       - run:
           name: Create eks cluster

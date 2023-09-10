@@ -57,8 +57,9 @@ jobs:
       - run:
           name: Install tar
           command: |
-            sudo apt update
-            sudo apt install tar
+            sudo yum update
+            sudo yum install tar
+            tar --version
       - attach_workspace:
           at: ~/
       - run:

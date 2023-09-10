@@ -54,6 +54,11 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - run:
+          name: Install tar
+          command: |
+            sudo apt update
+            sudo apt install tar
       - attach_workspace:
           at: ~/
       - run:

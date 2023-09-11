@@ -81,7 +81,27 @@ jobs:
       - run:
           name: Create eks cluster
           command: |
-            # Write command here
+            echo "create cluster"
+            eksctl create cluster --name eksctl-capstone-${CIRCLE_WORKFLOW_ID:0:7} --region=us-east-1 [--profile <profile-name>]
+
+            echo "Check the health of clusters nodes"
+            kubectl get nodes
+
+            echo "Deploy an App from Dockerhub to the Kubernetes Cluster"
+            kubectl create deploy eksctl-capstone --image=${DOCKER_PATH}/capstone-squirtle-${CIRCLE_WORKFLOW_ID:0:7}
+
+            echo "Waiting until cluster is deployed successfully"
+            kubectl wait deployment eksctl-capstone --for condition=Available=True
+
+            echo "See the status"
+            kubectl get deploy,rs,svc,pods
+
+            echo "Get the pods name"
+            export POD_NAME=POD_NAME=$(kubectl get pods -l eksctl-capstone -o jsonpath="{.items[0].metadata.name}")
+
+            echo "Port forward"
+            kubectl port-forward ${POD_NAME} --address 0.0.0.0 5000:5000
+            
 workflows:
   default:
     jobs:

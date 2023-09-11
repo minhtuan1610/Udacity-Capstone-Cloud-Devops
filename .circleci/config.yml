@@ -81,26 +81,40 @@ jobs:
       - run:
           name: Create eks cluster
           command: |
-            echo "create cluster"
-            eksctl create cluster --name eksctl-capstone-${CIRCLE_WORKFLOW_ID:0:7} --region=us-east-1
+            # echo "create cluster"
+            # eksctl create cluster --name eksctl-capstone-${CIRCLE_WORKFLOW_ID:0:7} --region=us-east-1
 
-            echo "Check the health of clusters nodes"
+            # echo "Check the health of clusters nodes"
+            # kubectl get nodes
+
+            # echo "Deploy an App from Dockerhub to the Kubernetes Cluster"
+            # kubectl create deploy eksctl-capstone --image=${DOCKER_PATH}/capstone-squirtle-${CIRCLE_WORKFLOW_ID:0:7}
+
+            # echo "Waiting until cluster is deployed successfully"
+            # kubectl wait deployment eksctl-capstone --for condition=Available=True
+
+            # echo "See the status"
+            # kubectl get deploy,rs,svc,pods
+
+            # echo "Get the pods name"
+            # export POD_NAME=POD_NAME=$(kubectl get pods -l eksctl-capstone -o jsonpath="{.items[0].metadata.name}")
+
+            # echo "Port forward"
+            # kubectl port-forward ${POD_NAME} --address 0.0.0.0 5000:5000
+
+            eksctl create cluster --name "casptone-project-${CIRCLE_WORKFLOW_ID:0:7}" --region=us-east-1
             kubectl get nodes
-
-            echo "Deploy an App from Dockerhub to the Kubernetes Cluster"
-            kubectl create deploy eksctl-capstone --image=${DOCKER_PATH}/capstone-squirtle-${CIRCLE_WORKFLOW_ID:0:7}
-
-            echo "Waiting until cluster is deployed successfully"
-            kubectl wait deployment eksctl-capstone --for condition=Available=True
-
-            echo "See the status"
+            kubectl create deploy capstone-project-eks --image="${DOCKER_PATH}/capstone-project-${CIRCLE_WORKFLOW_ID:0:7}"
             kubectl get deploy,rs,svc,pods
-
-            echo "Get the pods name"
-            export POD_NAME=POD_NAME=$(kubectl get pods -l eksctl-capstone -o jsonpath="{.items[0].metadata.name}")
-
-            echo "Port forward"
-            kubectl port-forward ${POD_NAME} --address 0.0.0.0 5000:5000
+            echo "-----------------------------------"
+            
+            kubectl wait deployment capstone-project-eks --for condition=Available=True --timeout=120s 
+            kubectl get deploy,rs,svc,pods
+            echo "-----------------------------------"
+            
+            kubectl expose deployment capstone-project-eks --port=3000 --target-port=3000 --name=capstone-project-lb --type=LoadBalancer
+            kubectl get deploy,rs,svc,pods
+            echo "-----------------------------------"
             
 workflows:
   default:

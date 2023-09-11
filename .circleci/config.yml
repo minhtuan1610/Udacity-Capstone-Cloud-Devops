@@ -82,7 +82,7 @@ jobs:
           name: Create eks cluster
           command: |
             echo "create cluster"
-            eksctl create cluster --name eksctl-capstone-${CIRCLE_WORKFLOW_ID:0:7} --region=us-east-1 [--profile <profile-name>]
+            eksctl create cluster --name eksctl-capstone-${CIRCLE_WORKFLOW_ID:0:7} --region=us-east-1
 
             echo "Check the health of clusters nodes"
             kubectl get nodes

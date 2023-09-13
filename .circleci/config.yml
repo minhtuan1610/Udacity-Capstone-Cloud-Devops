@@ -57,8 +57,9 @@ jobs:
       - run:
           name: Install tar
           command: |
-            yum update
-            yum -y install tar gzip
+            yum -y update
+            echo "----------install tar and gzip----------"
+            yum install -y tar gzip
             tar --version
       - attach_workspace:
           at: ~/

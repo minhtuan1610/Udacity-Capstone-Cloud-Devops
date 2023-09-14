@@ -2,3 +2,5 @@
 http://a6d2975775ba94d929517fcb33ce283e-1113897778.us-east-1.elb.amazonaws.com:8080/
 # Github
 https://github.com/minhtuan1610/Udacity-Capstone-Cloud-Devops
+# Certificate
+https://graduation.udacity.com/confirm/e/6a2757a6-de02-11ed-b40a-bb66b229ce89
